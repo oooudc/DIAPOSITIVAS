@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Estudio Técnico en Evaluación de Proyectos</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50, #4a6d8c);
+            color: var(--light);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .deck {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateX(100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            visibility: hidden;
+            background: linear-gradient(135deg, #2c3e50, #4a6d8c);
+            overflow-y: auto;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            visibility: visible;
+        }
+        
+        .slide-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .slide-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--secondary), var(--accent));
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        p, li {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 160px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 0.5rem;
+            padding: 1.2rem;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--light);
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .pros-cons {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+        
+        .pros, .cons {
+            width: 48%;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        
+        .pros {
+            background-color: rgba(46, 204, 113, 0.1);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--success);
+        }
+        
+        .cons {
+            background-color: rgba(231, 76, 60, 0.1);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .pros h3, .cons h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .pros h3 {
+            color: var(--success);
+        }
+        
+        .cons h3 {
+            color: var(--accent);
+        }
+        
+        ul {
+            padding-left: 1.5rem;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        .control-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .highlight-box {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .example-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-highlight {
+            background-color: rgba(46, 204, 113, 0.1);
+            border: 2px solid var(--success);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+        
+        .bar {
+            width: 80px;
+            background: linear-gradient(to top, var(--secondary), var(--accent));
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: height 1s ease;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slideIn {
+            opacity: 0;
+            animation: slideIn 0.5s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        .delay-5 { animation-delay: 1s; }
+        
+        .navigation-dots {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            z-index: 100;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background-color: var(--accent);
+            transform: scale(1.3);
+        }
+        
+        .two-column {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        
+        .column {
+            flex: 1;
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .icon-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .icon-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="deck">
+        <!-- Slide 1: Título -->
+        <div class="slide active">
+            <div class="slide-content">
+                <h1 class="animate-fadeIn">EL ESTUDIO TÉCNICO</h1>
+                <h3 class="animate-slideIn delay-1">En la Evaluación de Proyectos</h3>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>"El estudio técnico permite proponer y analizar las diferentes opciones tecnológicas para producir los bienes o servicios que se requieren, verificando la factibilidad técnica de cada una de ellas."</p>
+                    <p style="text-align: right;">- Gabriel Baca Urbina</p>
+                </div>
+                <p class="animate-slideIn delay-3">Basado en la obra <span class="highlight">"Evaluación de Proyectos"</span> (Séptima edición)</p>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Definición del Estudio Técnico -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Definición del Estudio Técnico</h2>
+                <div class="animate-slideIn">
+                    <p>El estudio técnico constituye la <span class="highlight">segunda etapa</span> de los proyectos de inversión, proporcionando información indispensable para analizar y determinar la factibilidad técnica de un proyecto.</p>
+                </div>
+                <div class="highlight-box animate-slideIn delay-1">
+                    <h3>Preguntas fundamentales que responde:</h3>
+                    <ul>
+                        <li><span class="highlight">¿Cómo?</span> producir lo que el mercado demanda</li>
+                        <li><span class="highlight">¿Dónde?</span> ubicar las instalaciones</li>
+                        <li><span class="highlight">¿Con qué?</span> tecnología e insumos producir</li>
+                        <li><span class="highlight">¿Qué?</span> infraestructura física se requiere</li>
+                        <li><span class="highlight">¿Cuánto?</span> producir y cuál es la capacidad necesaria</li>
+                    </ul>
+                </div>
+                <p class="animate-slideIn delay-2">A través de estas respuestas, el estudio técnico determina los requerimientos de equipos para la operación y el monto de la inversión correspondiente.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Objetivos del Estudio Técnico -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Objetivos del Estudio Técnico</h2>
+                <div class="two-column">
+                    <div class="column animate-slideIn">
+                        <h3>Objetivos Generales</h3>
+                        <ul>
+                            <li><span class="highlight">Verificar la posibilidad técnica</span> de la fabricación del producto o prestación del servicio</li>
+                            <li><span class="highlight">Analizar y determinar</span> el tamaño, localización, equipos, instalaciones y organización óptimos</li>
+                            <li><span class="highlight">Cuantificar</span> inversiones necesarias y costos de operación</li>
+                            <li><span class="highlight">Proporcionar bases</span> para el cálculo financiero y evaluación económica</li>
+                        </ul>
+                    </div>
+                    <div class="column animate-slideIn delay-2">
+                        <h3>Objetivos Específicos</h3>
+                        <ul>
+                            <li>Determinar la localización óptima</li>
+                            <li>Definir tamaño y capacidad</li>
+                            <li>Mostrar distribución y diseño de instalaciones</li>
+                            <li>Especificar presupuesto de inversión</li>
+                            <li>Incluir la organización requerida</li>
+                            <li>Identificar procesos productivos</li>
+                            <li>Seleccionar tecnología adecuada</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-3">
+                    <p>Según Baca Urbina, el estudio técnico no solo justifica la inversión, sino que <span class="highlight">optimiza la utilización de los recursos</span> disponibles en la producción.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Componentes del Estudio Técnico -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Componentes del Estudio Técnico</h2>
+                <div class="icon-grid animate-slideIn">
+                    <div class="icon-item">
+                        <div class="icon-circle">📍</div>
+                        <h3>Localización</h3>
+                        <p>Macro y micro localización óptima</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">📏</div>
+                        <h3>Tamaño</h3>
+                        <p>Capacidad instalada óptima</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">⚙️</div>
+                        <h3>Ingeniería</h3>
+                        <p>Procesos, tecnología y layout</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">👥</div>
+                        <h3>Organización</h3>
+                        <p>Estructura humana y jurídica</p>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Todos estos componentes están interrelacionados. Por ejemplo, la decisión sobre la localización puede afectar la tecnología a utilizar, y a su vez, la selección de tecnología puede influir en el tamaño óptimo del proyecto.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Análisis de Localización -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Análisis y Determinación de la Localización</h2>
+                <div class="animate-slideIn">
+                    <p>La localización óptima contribuye a maximizar la rentabilidad del proyecto a través de la minimización de costos. Este análisis se realiza en dos niveles:</p>
+                </div>
+                <div class="two-column animate-slideIn delay-1">
+                    <div class="column">
+                        <h3>Macrolocalización</h3>
+                        <p>Selección de la región o zona general donde se ubicará el proyecto:</p>
+                        <ul>
+                            <li>Proximidad a mercados y materias primas</li>
+                            <li>Disponibilidad de mano de obra</li>
+                            <li>Infraestructura disponible</li>
+                            <li>Políticas de desarrollo industrial</li>
+                            <li>Condiciones climáticas y ambientales</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Microlocalización</h3>
+                        <p>Determinación del sitio preciso dentro de la macrozona seleccionada:</p>
+                        <ul>
+                            <li>Costo y disponibilidad de terrenos</li>
+                            <li>Topografía y condiciones del suelo</li>
+                            <li>Accesibilidad (vías urbanas, transporte)</li>
+                            <li>Disponibilidad de servicios específicos</li>
+                            <li>Restricciones urbanísticas</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <h3>Métodos de evaluación:</h3>
+                    <ul>
+                        <li><span class="highlight">Método cualitativo por puntos</span></li>
+                        <li>Método de Brown y Gibson</li>
+                        <li>Método del centro de gravedad</li>
+                        <li>Método de transporte</li>
+                        <li>Análisis costo-beneficio por localización</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Método Cualitativo por Puntos -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Método Cualitativo por Puntos</h2>
+                <div class="animate-slideIn">
+                    <p>Es una técnica que permite evaluar diferentes alternativas de localización mediante la ponderación de factores relevantes.</p>
+                </div>
+                <div class="process-steps">
+                    <div class="step animate-slideIn delay-1">
+                        <div class="step-number">1</div>
+                        <p>Identificar factores relevantes</p>
+                    </div>
+                    <div class="step animate-slideIn delay-2">
+                        <div class="step-number">2</div>
+                        <p>Asignar peso relativo a cada factor</p>
+                    </div>
+                    <div class="step animate-slideIn delay-3">
+                        <div class="step-number">3</div>
+                        <p>Calificar cada localización por factor</p>
+                    </div>
+                    <div class="step animate-slideIn delay-4">
+                        <div class="step-number">4</div>
+                        <p>Calcular puntuación ponderada</p>
+                    </div>
+                    <div class="step animate-slideIn delay-5">
+                        <div class="step-number">5</div>
+                        <p>Seleccionar la mejor alternativa</p>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-6">
+                    <p>Según Baca Urbina, este método es especialmente útil cuando <span class="highlight">no es posible realizar una evaluación puramente cuantitativa</span> de los factores determinantes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Ejemplo de Método Cualitativo por Puntos -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Ejemplo: Método Cualitativo por Puntos</h2>
+                <div class="animate-slideIn">
+                    <p>Caso: Planta procesadora de alimentos con tres posibles localizaciones (A, B y C)</p>
+                </div>
+                <div class="animate-slideIn delay-1">
+                    <h3>Paso 1: Asignación de pesos a factores</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Peso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Materia prima disponible</td>
+                                <td>0.25</td>
+                            </tr>
+                            <tr>
+                                <td>Mano de obra disponible</td>
+                                <td>0.20</td>
+                            </tr>
+                            <tr>
+                                <td>Costo de los insumos</td>
+                                <td>0.15</td>
+                            </tr>
+                            <tr>
+                                <td>Costo del transporte</td>
+                                <td>0.15</td>
+                            </tr>
+                            <tr>
+                                <td>Cercanía al mercado</td>
+                                <td>0.15</td>
+                            </tr>
+                            <tr>
+                                <td>Disponibilidad de servicios básicos</td>
+                                <td>0.10</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>1.00</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Ejemplo de Método Cualitativo por Puntos (Continuación) -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Ejemplo: Método Cualitativo por Puntos</h2>
+                <div class="animate-slideIn">
+                    <h3>Pasos 2 y 3: Calificación y cálculo de puntuaciones ponderadas</h3>
+                </div>
+                <table class="animate-slideIn delay-1">
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Peso</th>
+                            <th colspan="2">Localización A</th>
+                            <th colspan="2">Localización B</th>
+                            <th colspan="2">Localización C</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><small>Calif.</small></td>
+                            <td><small>Pond.</small></td>
+                            <td><small>Calif.</small></td>
+                            <td><small>Pond.</small></td>
+                            <td><small>Calif.</small></td>
+                            <td><small>Pond.</small></td>
+                        </tr>
+                        <tr>
+                            <td>Materia prima</td>
+                            <td>0.25</td>
+                            <td>7</td>
+                            <td>1.75</td>
+                            <td>8</td>
+                            <td class="highlight">2.00</td>
+                            <td>5</td>
+                            <td>1.25</td>
+                        </tr>
+                        <tr>
+                            <td>Mano de obra</td>
+                            <td>0.20</td>
+                            <td>8</td>
+                            <td class="highlight">1.60</td>
+                            <td>7</td>
+                            <td>1.40</td>
+                            <td>8</td>
+                            <td class="highlight">1.60</td>
+                        </tr>
+                        <tr>
+                            <td>Costo insumos</td>
+                            <td>0.15</td>
+                            <td>6</td>
+                            <td>0.90</td>
+                            <td>7</td>
+                            <td>1.05</td>
+                            <td>8</td>
+                            <td class="highlight">1.20</td>
+                        </tr>
+                        <tr>
+                            <td>Costo transporte</td>
+                            <td>0.15</td>
+                            <td>7</td>
+                            <td>1.05</td>
+                            <td>8</td>
+                            <td class="highlight">1.20</td>
+                            <td>6</td>
+                            <td>0.90</td>
+                        </tr>
+                        <tr>
+                            <td>Cercanía mercado</td>
+                            <td>0.15</td>
+                            <td>8</td>
+                            <td class="highlight">1.20</td>
+                            <td>6</td>
+                            <td>0.90</td>
+                            <td>7</td>
+                            <td>1.05</td>
+                        </tr>
+                        <tr>
+                            <td>Servicios básicos</td>
+                            <td>0.10</td>
+                            <td>8</td>
+                            <td>0.80</td>
+                            <td>9</td>
+                            <td class="highlight">0.90</td>
+                            <td>7</td>
+                            <td>0.70</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong>1.00</strong></td>
+                            <td></td>
+                            <td><strong>7.30</strong></td>
+<td></td>
+                            <td><strong>7.45</strong></td>
+                            <td></td>
+                            <td><strong>6.70</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="result-highlight animate-slideIn delay-2">
+                    <h3>Localización B: Seleccionada</h3>
+                    <p>Con una puntuación de 7.45, representa la mejor opción según los criterios evaluados.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 9: Análisis y Determinación del Tamaño -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Análisis y Determinación del Tamaño</h2>
+                <div class="animate-slideIn">
+                    <p>El tamaño del proyecto hace referencia a la <span class="highlight">capacidad de producción instalada</span>, expresada en unidades de producción por unidad de tiempo (piezas/hora, toneladas/día, etc.).</p>
+                </div>
+                <div class="two-column animate-slideIn delay-1">
+                    <div class="column">
+                        <h3>Factores determinantes del tamaño</h3>
+                        <ul>
+                            <li>Demanda del mercado (límite superior)</li>
+                            <li>Suministro de insumos y materias primas</li>
+                            <li>Tecnología y equipos disponibles</li>
+                            <li>Capacidad financiera</li>
+                            <li>Recursos humanos disponibles</li>
+                            <li>Normativa aplicable</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Economía del tamaño</h3>
+                        <ul>
+                            <li>Economías de escala</li>
+                            <li>Costos de inversión por unidad de capacidad</li>
+                            <li>Costos de operación en diferentes escalas</li>
+                            <li>Relación tamaño-tecnología</li>
+                            <li>Flexibilidad para crecimiento modular</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Según Baca Urbina, el tamaño óptimo es aquel que asegure la <span class="highlight">más alta rentabilidad</span> desde el punto de vista privado o la <span class="highlight">mayor diferencia entre beneficios y costos sociales</span> desde el punto de vista social.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 10: Ingeniería del Proyecto -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Ingeniería del Proyecto</h2>
+                <div class="animate-slideIn">
+                    <p>La ingeniería del proyecto comprende todos los aspectos técnicos y de infraestructura que permiten el proceso de fabricación del producto o la prestación del servicio.</p>
+                </div>
+                <div class="icon-grid animate-slideIn delay-1">
+                    <div class="icon-item">
+                        <div class="icon-circle">🔄</div>
+                        <h3>Procesos</h3>
+                        <p>Descripción del proceso productivo</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">🔧</div>
+                        <h3>Equipos</h3>
+                        <p>Selección de maquinaria y equipo</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">🏭</div>
+                        <h3>Layout</h3>
+                        <p>Distribución de planta</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">🏗️</div>
+                        <h3>Obras</h3>
+                        <p>Obras físicas y edificaciones</p>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>La ingeniería del proyecto debe <span class="highlight">resolver todo lo concerniente a la instalación y funcionamiento</span> de la planta. Desde la descripción del proceso, adquisición de equipo y maquinaria, hasta la distribución óptima de la planta.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 11: Descripción del Proceso Productivo -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Descripción del Proceso Productivo</h2>
+                <div class="animate-slideIn">
+                    <p>La selección del proceso debe ser <span class="highlight">flexible y adaptada</span> a las necesidades específicas del proyecto.</p>
+                </div>
+                <div class="two-column animate-slideIn delay-1">
+                    <div class="column">
+                        <h3>Tipos de procesos</h3>
+                        <ul>
+                            <li><span class="highlight">Por lotes:</span> Producción intermitente</li>
+                            <li><span class="highlight">Continuo:</span> Flujo constante sin interrupciones</li>
+                            <li><span class="highlight">Por proyecto:</span> Productos únicos o personalizados</li>
+                            <li><span class="highlight">Por células:</span> Agrupación por familias de productos</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Herramientas de representación</h3>
+                        <ul>
+                            <li>Diagramas de bloques</li>
+                            <li>Diagramas de flujo del proceso</li>
+                            <li>Cursogramas analíticos</li>
+                            <li>Diagramas de recorrido</li>
+                            <li>Balances de materia y energía</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Baca Urbina enfatiza que la <span class="highlight">tecnología seleccionada debe justificarse</span> técnica y económicamente, considerando aspectos como disponibilidad, mantenimiento, proveedores y obsolescencia.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 12: Distribución de Planta -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Distribución de Planta (Layout)</h2>
+                <div class="animate-slideIn">
+                    <p>Una buena distribución proporciona condiciones óptimas de trabajo, aumenta la eficiencia y reduce costos operativos.</p>
+                </div>
+                <div class="two-column animate-slideIn delay-1">
+                    <div class="column">
+                        <h3>Tipos de distribución</h3>
+                        <ul>
+                            <li><span class="highlight">Por producto:</span> Línea de producción continua</li>
+                            <li><span class="highlight">Por proceso:</span> Agrupación por funciones similares</li>
+                            <li><span class="highlight">Celular:</span> Células de trabajo autónomas</li>
+                            <li><span class="highlight">Por posición fija:</span> El producto no se mueve</li>
+                            <li><span class="highlight">Híbrida:</span> Combinación de tipos anteriores</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Objetivos de la distribución</h3>
+                        <ul>
+                            <li>Integración de todos los factores</li>
+                            <li>Movimiento de materiales mínimo</li>
+                            <li>Circulación del trabajo eficiente</li>
+                            <li>Utilización efectiva del espacio</li>
+                            <li>Flexibilidad para adaptación o expansión</li>
+                            <li>Seguridad para los trabajadores</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Según Baca Urbina, el diseño de la distribución debe considerar la posibilidad de <span class="highlight">crecimiento futuro</span> para evitar costosas redistribuciones posteriores.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 13: Organización Humana y Jurídica -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Organización Humana y Jurídica</h2>
+                <div class="animate-slideIn">
+                    <p>El estudio técnico debe incluir los aspectos organizativos y legales necesarios para la operación del proyecto.</p>
+                </div>
+                <div class="two-column animate-slideIn delay-1">
+                    <div class="column">
+                        <h3>Estructura organizativa</h3>
+                        <ul>
+                            <li>Organigrama funcional del área técnica</li>
+                            <li>Descripción de puestos y funciones</li>
+                            <li>Niveles de autoridad y responsabilidad</li>
+                            <li>Políticas operativas y de calidad</li>
+                            <li>Sistemas de gestión operativa</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Aspectos jurídicos relevantes</h3>
+                        <ul>
+                            <li>Normativa técnica aplicable</li>
+                            <li>Permisos y licencias operativas</li>
+                            <li>Certificaciones requeridas</li>
+                            <li>Patentes y propiedad intelectual</li>
+                            <li>Normativa ambiental aplicable</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Baca Urbina destaca que <span class="highlight">la estructura organizativa debe estar alineada con los requerimientos técnicos</span> del proyecto, considerando tanto la fase de implementación como la de operación.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 14: Determinación de Costos e Inversiones -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Determinación de Costos e Inversiones</h2>
+                <div class="animate-slideIn">
+                    <p>El estudio técnico debe proporcionar información para cuantificar el monto de las inversiones y los costos de operación.</p>
+                </div>
+                <div class="two-column animate-slideIn delay-1">
+                    <div class="column">
+                        <h3>Inversiones fijas y diferidas</h3>
+                        <ul>
+                            <li>Terrenos y acondicionamiento</li>
+                            <li>Obras civiles e instalaciones</li>
+                            <li>Maquinaria y equipo principal</li>
+                            <li>Equipos auxiliares y de transporte</li>
+                            <li>Estudios y proyectos</li>
+                            <li>Gastos de puesta en marcha</li>
+                            <li>Patentes y licencias</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Costos de producción</h3>
+                        <ul>
+                            <li>Materias primas e insumos</li>
+                            <li>Mano de obra directa</li>
+                            <li>Costos indirectos de fabricación</li>
+                            <li>Mantenimiento</li>
+                            <li>Depreciación y amortización</li>
+                            <li>Control de calidad</li>
+                            <li>Capital de trabajo técnico</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Baca Urbina enfatiza que la <span class="highlight">precisión en la estimación de costos e inversiones</span> es crucial para la evaluación financiera y la viabilidad económica del proyecto.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 15: Metodología para la Elaboración -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Metodología para la Elaboración</h2>
+                <div class="animate-slideIn">
+                    <h3>Etapas del Estudio Técnico</h3>
+                </div>
+                <div class="process-steps animate-slideIn delay-1">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <p>Análisis preliminar</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <p>Evaluación de alternativas</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <p>Desarrollo de la alternativa seleccionada</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <p>Determinación de requerimientos</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <p>Estimación de inversiones y costos</p>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <h3>Herramientas y Técnicas Utilizadas</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <ul>
+                                <li>Diagramas técnicos</li>
+                                <li>Métodos de evaluación de localización</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <ul>
+                                <li>Análisis de tamaño y capacidad</li>
+                                <li>Técnicas de estimación de costos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 16: Relación con Otros Componentes -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Relación con Otros Componentes</h2>
+                <div class="icon-grid animate-slideIn">
+                    <div class="icon-item">
+                        <div class="icon-circle">📊</div>
+                        <h3>Estudio de Mercado</h3>
+                        <p>Define demanda, especificaciones y ubicación de consumidores</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">💰</div>
+                        <h3>Estudio Económico-Financiero</h3>
+                        <p>Recibe inversiones, costos y vida útil de activos</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">👥</div>
+                        <h3>Estudio Organizacional</h3>
+                        <p>Integra estructura técnica y perfiles</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">⚖️</div>
+                        <h3>Estudio Legal y Ambiental</h3>
+                        <p>Considera normativas técnicas y ambientales</p>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Baca Urbina destaca que el <span class="highlight">estudio técnico no puede desarrollarse de manera aislada</span>. Existe una interrelación constante y necesaria con los demás componentes del proyecto para asegurar su coherencia global.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 17: Factores Críticos de Éxito -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Factores Críticos de Éxito</h2>
+                <div class="animate-slideIn">
+                    <p>Para asegurar la calidad y utilidad del estudio técnico, se deben considerar los siguientes factores críticos:</p>
+                </div>
+                <div class="icon-grid animate-slideIn delay-1">
+                    <div class="icon-item">
+                        <div class="icon-circle">📈</div>
+                        <h3>Calidad de la Información</h3>
+                        <p>Fuentes confiables y actualizadas</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">🔄</div>
+                        <h3>Flexibilidad y Adaptabilidad</h3>
+                        <p>Diseño modular que permita crecimiento</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">💡</div>
+                        <h3>Balance Innovación-Seguridad</h3>
+                        <p>Tecnologías probadas vs. innovadoras</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">🧩</div>
+                        <h3>Enfoque Integrado</h3>
+                        <p>Coordinación entre componentes técnicos</p>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>Baca Urbina enfatiza que la <span class="highlight">calidad del estudio técnico influye directamente en la precisión de las estimaciones</span> de inversión y costos, elementos críticos para la evaluación financiera.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 18: Presentación de Resultados -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Presentación de Resultados</h2>
+                <div class="two-column animate-slideIn">
+                    <div class="column">
+                        <h3>Estructura del Informe Técnico</h3>
+                        <ol>
+                            <li>Resumen ejecutivo técnico</li>
+                            <li>Determinación de la localización</li>
+                            <li>Determinación del tamaño</li>
+                            <li>Descripción del proceso productivo</li>
+                            <li>Selección de tecnología y equipamiento</li>
+                            <li>Distribución de planta y layout</li>
+                            <li>Requerimientos de obras físicas</li>
+                            <li>Organización para la producción</li>
+                            <li>Estimación de inversiones y costos</li>
+                            <li>Conclusiones técnicas</li>
+                        </ol>
+                    </div>
+                    <div class="column">
+                        <h3>Elementos Visuales y Anexos</h3>
+                        <ul>
+                            <li>Planos y diagramas de localización</li>
+                            <li>Diagramas de flujo de procesos</li>
+                            <li>Planos de distribución de planta</li>
+                            <li>Especificaciones técnicas</li>
+                            <li>Cotizaciones y presupuestos</li>
+                            <li>Memorias de cálculo</li>
+                            <li>Balances de materia y energía</li>
+                            <li>Cronogramas de implementación</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <p>La presentación clara y estructurada de los resultados facilita la <span class="highlight">toma de decisiones</span> sobre la viabilidad técnica y la conveniencia de implementar el proyecto.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 19: Conclusiones -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Conclusiones</h2>
+                <div class="animate-slideIn">
+                    <p>El estudio técnico representa un <span class="highlight">componente fundamental</span> en la evaluación de proyectos, proporcionando las bases para determinar si es posible fabricar y vender el producto/servicio con la calidad, cantidad y costo requeridos.</p>
+                </div>
+                <div class="animate-slideIn delay-1">
+                    <p>La calidad del estudio técnico <span class="highlight">influye directamente</span> en la precisión de las estimaciones de inversión y costos, elementos críticos para la evaluación financiera y toma de decisiones.</p>
+                </div>
+                <div class="animate-slideIn delay-2">
+                    <p>Un estudio técnico bien elaborado no solo determina la <span class="highlight">viabilidad técnica</span> del proyecto, sino que también puede identificar oportunidades de optimización, diferenciación competitiva y creación de valor.</p>
+                </div>
+                <div class="animate-slideIn delay-3">
+                    <p>La <span class="highlight">integración efectiva</span> del estudio técnico con los demás componentes del proyecto es esencial para asegurar la coherencia global y el éxito en la implementación.</p>
+                </div>
+                <div class="highlight-box animate-slideIn delay-4">
+                    <p>"La importancia del estudio técnico radica en que permite verificar la posibilidad técnica de fabricación del producto o prestación del servicio que pretende realizar con el proyecto, y proporciona información básica para el cálculo financiero."</p>
+                    <p style="text-align: right;">- Gabriel Baca Urbina</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 20: Referencias -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Referencias</h2>
+                <div class="animate-slideIn">
+                    <h3>Bibliografía principal</h3>
+                    <ul>
+                        <li class="highlight">Baca Urbina, Gabriel. (2013). <i>Evaluación de proyectos</i>. Séptima edición. McGraw-Hill.</li>
+                    </ul>
+                </div>
+                <div class="animate-slideIn delay-1">
+                    <h3>Bibliografía complementaria</h3>
+                    <ul>
+                        <li>Sapag Chain, Nassir y Sapag Chain, Reinaldo. (2008). <i>Preparación y Evaluación de Proyectos</i>. Quinta edición. McGraw-Hill.</li>
+                        <li>Córdoba Padilla, Marcial. (2011). <i>Formulación y Evaluación de Proyectos</i>. Segunda edición. Ecoe Ediciones.</li>
+                        <li>Morales Castro, José Antonio. (2009). <i>Proyectos de Inversión: Evaluación y Formulación</i>. McGraw-Hill.</li>
+                    </ul>
+                </div>
+                <div class="highlight-box animate-slideIn delay-2">
+                    <h3>Recursos adicionales</h3>
+                    <p>Para profundizar en los métodos de análisis de localización y distribución de planta:</p>
+                    <ul>
+                        <li>Muther, Richard. (1981). <i>Distribución en Planta</i>. Editorial Hispano Europea.</li>
+                        <li>Tompkins, J. A. et al. (2010). <i>Planeación de Instalaciones</i>. Cuarta edición. Cengage Learning.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controles de navegación -->
+        <div class="controls">
+            <button class="control-btn" id="prev-btn">&larr;</button>
+            <button class="control-btn" id="next-btn">&rarr;</button>
+        </div>
+        <div class="slide-number" id="slide-number">Diapositiva 1 / 20</div>
+        
+        <div class="navigation-dots" id="nav-dots">
+            <!-- Dots generados dinámicamente por JS -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const slideNumber = document.getElementById('slide-number');
+            const navDots = document.getElementById('nav-dots');
+            
+            let currentSlideIndex = 0;
+            
+            // Crear puntos de navegación
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('nav-dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                navDots.appendChild(dot);
+            });
+            
+            const dots = document.querySelectorAll('.nav-dot');
+            
+            function updateSlideNumber() {
+                slideNumber.textContent = `Diapositiva ${currentSlideIndex + 1} / ${slides.length}`;
+            }
+            
+            function goToSlide(index) {
+                slides[currentSlideIndex].classList.remove('active');
+                dots[currentSlideIndex].classList.remove('active');
+                
+                currentSlideIndex = index;
+                
+                slides[currentSlideIndex].classList.add('active');
+                dots[currentSlideIndex].classList.add('active');
+                
+                updateSlideNumber();
+            }
+            
+            function nextSlide() {
+                if (currentSlideIndex < slides.length - 1) {
+                    goToSlide(currentSlideIndex + 1);
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlideIndex > 0) {
+                    goToSlide(currentSlideIndex - 1);
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Teclado
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // Iniciar
+            updateSlideNumber();
+            
+            // Hacer primera diapositiva visible
+            slides[0].classList.add('active');
+        });
+    </script>
+</body>
+</html>
